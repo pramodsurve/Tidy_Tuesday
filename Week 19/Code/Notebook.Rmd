@@ -18,10 +18,19 @@ Explore Dataset
 ```{r Explore}
 
 library(tidyverse)
+library(lubridate)
 
 glimpse(water)
 
-#DataExplorer::create_report(water)
+DataExplorer::create_report(water)
+
+fact_cols <- c("status_id", "water_source", "water_tech", "facility_type", "country_name")
+
+
+# Convert columns to appropriate type
+
+water <- water %>% mutate(across(fact_cols, as_factor), 
+                          report_date = mdy(report_date))
 
 ```
 
