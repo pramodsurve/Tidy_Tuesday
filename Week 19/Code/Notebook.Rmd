@@ -78,8 +78,10 @@ bplot <- g[[1]] + g[[2]] +g[[3]] + g[[4]] + g[[5]] + plot_layout(ncol = 2)
 
 int_g <- girafe(ggobj = bplot)
 
+int_g <- girafe_options(int_g, opts_sizing(rescale = FALSE))
+
 int_g
 
 ```
 
-
+Interactivity works as expected, but the x-labels are too long that obscures the graph completely. Need a way to control the size of x labels.
