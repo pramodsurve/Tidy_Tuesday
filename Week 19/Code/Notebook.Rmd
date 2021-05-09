@@ -20,9 +20,9 @@ Explore Dataset
 library(tidyverse)
 library(lubridate)
 
-glimpse(water)
+#glimpse(water)
 
-DataExplorer::create_report(water)
+#DataExplorer::create_report(water)
 
 fact_cols <- c("status_id", "water_source", "water_tech", "facility_type", "country_name")
 
@@ -33,4 +33,53 @@ water <- water %>% mutate(across(fact_cols, as_factor),
                           report_date = mdy(report_date))
 
 ```
+
+
+Plot water points on basic map
+
+```{r map}
+
+water %>% ggplot(aes(lon_deg, lat_deg)) + 
+  geom_point(size = .25, show.legend = FALSE) +
+  coord_quickmap()
+
+ind <- map_data("world") %>% filter(region %in% c("Kenya", "Namibia", "South Africa", "Egypt"))
+
+ggplot() +
+  geom_polygon(data = ind, aes(x = long, y = lat, group = group), fill="lightgray", colour = "white") + 
+  geom_point(data = water, aes(lon_deg, lat_deg), size = 0.25) + theme_bw()
+
+```
+
+
+Interactive Brushing
+
+```{r Brushing_Bars}
+
+library(patchwork)
+library(ggiraph)
+
+var_list <- c('status_id', 'water_source', 'water_tech', 'facility_type', 'country_name')
+
+
+gen_bar <- function(var, brush_var){
+  ggplot(water) + geom_bar_interactive(aes(fct_rev(fct_infreq(!!sym(var))), 
+                                       data_id = !!sym(brush_var),
+                                       tooltip = !!sym(brush_var))) +
+    labs(title = var) +
+    xlab(NULL) +
+    theme(axis.text.x = element_text(size = 4)) +
+    coord_flip()
+}
+
+g <- map(var_list, ~gen_bar(var = ., brush_var = 'status_id'))
+
+bplot <- g[[1]] + g[[2]] +g[[3]] + g[[4]] + g[[5]] + plot_layout(ncol = 2)
+
+int_g <- girafe(ggobj = bplot)
+
+int_g
+
+```
+
 
