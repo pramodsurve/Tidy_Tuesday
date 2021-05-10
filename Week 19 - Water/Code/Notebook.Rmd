@@ -43,11 +43,11 @@ water %>% ggplot(aes(lon_deg, lat_deg)) +
   geom_point(size = .25, show.legend = FALSE) +
   coord_quickmap()
 
-ind <- map_data("world") %>% filter(region %in% c("Kenya", "Namibia", "South Africa", "Egypt"))
+#ind <- map_data("world") %>% filter(region %in% c("Kenya", "Namibia", "South Africa", "Egypt"))
 
-ggplot() +
-  geom_polygon(data = ind, aes(x = long, y = lat, group = group), fill="lightgray", colour = "white") + 
-  geom_point(data = water, aes(lon_deg, lat_deg), size = 0.25) + theme_bw()
+#ggplot() +
+#  geom_polygon(data = ind, aes(x = long, y = lat, group = group), fill="lightgray", colour = "white") + 
+#  geom_point(data = water, aes(lon_deg, lat_deg), size = 0.25) + theme_bw()
 
 ```
 
@@ -123,29 +123,30 @@ Cumulative line chart Animation
 library(gganimate)
 
 country_year_cum <- country_year %>% group_by(country_name) %>% 
-  mutate(cum_installs = cumsum(number_of_points)) %>% ungroup() %>% 
-  filter(install_year <= 2021)
+  mutate(cum_installs = cumsum(number_of_points)) %>% ungroup() %>% filter(install_year <= 2021)
 
 top_countries <-country_year_cum %>% 
   group_by(country_name) %>% 
   slice_tail() %>% 
-  arrange(-cum_installs) %>% 
+  arrange(-cum_installs) %>%
   ungroup() %>% 
   slice_head(n = 5)
 
 
 top_country_cum <- country_year_cum %>% 
-  semi_join(top_countries, by = "country_name") 
+  semi_join(top_countries, by = "country_name")
 
 
 g <- top_country_cum %>% ggplot(aes(install_year, cum_installs, color = country_name)) + 
   geom_line(size = 1) +
   geom_point(size = 2) + 
   ggrepel::geom_text_repel(aes(label = country_name)) +
-  guides(color = "none") +
+  guides(color = "none") + 
   transition_reveal(install_year)
 
-animate(g, renderer = gifski_renderer(loop = FALSE))
+animate(g, renderer = gifski_renderer(file = here::here("Week 19 - Water", "Output", "Animation.gif"), loop = FALSE))
+
+
 
 
 ```
