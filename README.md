@@ -1,2 +1,2 @@
 # Tidy_Tuesday
-Practice with Tidy Tuesday Datasets
+Practice Visualization with Tidy Tuesday Datasets
