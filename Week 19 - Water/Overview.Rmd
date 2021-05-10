@@ -2,7 +2,7 @@
 title: "Overview"
 author: "Pramod Surve"
 date: "5/10/2021"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
