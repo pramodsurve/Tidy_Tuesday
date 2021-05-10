@@ -165,17 +165,41 @@ top_country_cum1 <- top_country_cum %>%
   filter(year <= 2020) %>% 
   ungroup() %>% 
   group_by(year) %>% 
-  mutate(rank = rank(-cum_installs, ties.method = "first")) %>% 
+  mutate(rank = as_factor(rank(cum_installs, ties.method = "first"))) %>% 
   ungroup()
 
 top_country_cum1 %>% 
-  ggplot(aes(cum_installs, reorder(country_name, cum_installs), group = country_name)) + 
-  geom_col() + 
-  labs(title = "Year: {closest_state}", y = "Country") + 
+  ggplot(aes(cum_installs, rank), group = country_name) + 
+  geom_col(aes(fill = country_name)) + 
+  geom_text(
+    aes(x = -200, label = country_name),
+    hjust = 1, size = 14/.pt
+  ) +
+  labs(title = "Year: {closest_state}", y = "Country") +
+  guides(fill = "none") +
   #gghighlight::gghighlight(country_name == "Uganda") +
+  theme_minimal() +
+  theme(
+    axis.ticks.y = element_blank(),
+    axis.text.y = element_blank()
+  ) +
   transition_states(year, transition_length = 10, state_length = 100, wrap = FALSE)
 
 animate(g, renderer = gifski_renderer(file = here::here("Week 19 - Water", "Output", "Animation_Bar.gif"), loop = FALSE))
 
 
 ```
+
+
+
+
+```{r}
+top_country_cum1 %>% 
+  filter(year == 1980) %>% 
+  ggplot(aes(cum_installs, rank)) + 
+  geom_col(aes(fill = country_name)) + 
+  labs(title = "Year: {closest_state}", y = "Country") 
+  #gghighlight::gghighlight(country_name == "Uganda")
+
+```
+

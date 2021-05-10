@@ -17,5 +17,7 @@ and animation for water points installed by country.
     graphs too small and unreadable. Need to find a way to reduce the
     size of labels in the output.
 
--   Bar graph animation does not produce graph where the country moves
-    because of change in the rank at that year.
+-   Bar graph animation produces graph where the country moves because
+    of change in the rank at that year but there is a glitch where row
+    for one data point was removed and so water point shows up as zero
+    for that country.
