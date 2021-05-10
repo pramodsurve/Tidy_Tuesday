@@ -147,7 +147,35 @@ g <- top_country_cum %>% ggplot(aes(install_year, cum_installs, color = country_
 animate(g, renderer = gifski_renderer(file = here::here("Week 19 - Water", "Output", "Animation.gif"), loop = FALSE))
 
 
+```
+
+
+
+Bar Chart Animation
+
+```{r Bar Chart Animation}
+
+library(gganimate)
+
+
+top_country_cum1 <- top_country_cum %>% 
+  mutate(year = ceiling(install_year/10) * 10) %>%
+  group_by(country_name, year) %>% 
+  slice_tail() %>% 
+  filter(year <= 2020) %>% 
+  ungroup() %>% 
+  group_by(year) %>% 
+  mutate(rank = rank(-cum_installs, ties.method = "first")) %>% 
+  ungroup()
+
+top_country_cum1 %>% 
+  ggplot(aes(cum_installs, reorder(country_name, cum_installs), group = country_name)) + 
+  geom_col() + 
+  labs(title = "Year: {closest_state}", y = "Country") + 
+  #gghighlight::gghighlight(country_name == "Uganda") +
+  transition_states(year, transition_length = 10, state_length = 100, wrap = FALSE)
+
+animate(g, renderer = gifski_renderer(file = here::here("Week 19 - Water", "Output", "Animation_Bar.gif"), loop = FALSE))
 
 
 ```
-

@@ -16,3 +16,6 @@ and animation for water points installed by country.
 -   For Brushing (ggiraph) the long labels on x and y axis makes the
     graphs too small and unreadable. Need to find a way to reduce the
     size of labels in the output.
+
+-   Bar graph animation does not produce graph where the country moves
+    because of change in the rank at that year.
