@@ -68,7 +68,7 @@ gen_bar <- function(var, brush_var){
                                        tooltip = !!sym(brush_var))) +
     labs(title = var) +
     xlab(NULL) +
-    theme(axis.text.x = element_text(size = 4)) +
+    theme(axis.text.x = element_text(size = 1)) +
     coord_flip()
 }
 
@@ -85,3 +85,32 @@ int_g
 ```
 
 Interactivity works as expected, but the x-labels are too long that obscures the graph completely. Need a way to control the size of x labels.
+
+
+
+Line Charts by Year
+
+```{r Line Charts}
+
+library(ggiraph)
+
+country_year <- water %>% group_by(country_name, install_year) %>% 
+  summarise(number_of_points = n()) %>% ungroup()
+
+
+g <- country_year %>% ggplot(aes(install_year, number_of_points)) + geom_line_interactive(aes(tooltip = country_name, color = country_name, data_id = country_name)) + 
+  ylim(c(0, 8000)) + guides(color = FALSE) + 
+  #facet_wrap(~status_id) +
+  theme_minimal()
+
+g1 <- girafe(ggobj = g)
+
+g1 <- girafe_options(g1, 
+               opts_tooltip(opacity = 0.7),
+               opts_hover(css = "stroke:red;opacity = 1;"),
+               opts_hover_inv(css = "stroke:grey; opacity = 0.01;"))
+
+if (interactive()) print(g1)
+
+```
+
