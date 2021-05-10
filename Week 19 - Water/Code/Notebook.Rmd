@@ -95,7 +95,7 @@ Line Charts by Year
 library(ggiraph)
 
 country_year <- water %>% group_by(country_name, install_year) %>% 
-  summarise(number_of_points = n()) %>% ungroup()
+  summarise(number_of_points = n()) %>% ungroup() %>% drop_na(c(country_name, install_year))
 
 
 g <- country_year %>% ggplot(aes(install_year, number_of_points)) + geom_line_interactive(aes(tooltip = country_name, color = country_name, data_id = country_name)) + 
@@ -111,6 +111,42 @@ g1 <- girafe_options(g1,
                opts_hover_inv(css = "stroke:grey; opacity = 0.01;"))
 
 if (interactive()) print(g1)
+
+```
+
+
+
+Cumulative line chart Animation
+
+```{r cumulative line chart}
+
+library(gganimate)
+
+country_year_cum <- country_year %>% group_by(country_name) %>% 
+  mutate(cum_installs = cumsum(number_of_points)) %>% ungroup() %>% 
+  filter(install_year <= 2021)
+
+top_countries <-country_year_cum %>% 
+  group_by(country_name) %>% 
+  slice_tail() %>% 
+  arrange(-cum_installs) %>% 
+  ungroup() %>% 
+  slice_head(n = 5)
+
+
+top_country_cum <- country_year_cum %>% 
+  semi_join(top_countries, by = "country_name") 
+
+
+g <- top_country_cum %>% ggplot(aes(install_year, cum_installs, color = country_name)) + 
+  geom_line(size = 1) +
+  geom_point(size = 2) + 
+  ggrepel::geom_text_repel(aes(label = country_name)) +
+  guides(color = "none") +
+  transition_reveal(install_year)
+
+animate(g, renderer = gifski_renderer(loop = FALSE))
+
 
 ```
 
