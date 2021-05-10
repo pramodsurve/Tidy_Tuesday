@@ -5,7 +5,7 @@ Pramod Surve
 
 ## Week 19 Water Dataset
 
-I concentrated in ggiraph and gganimate packages to create interactive
+I concentrated on ggiraph and gganimate packages to create interactive
 and animation for water points installed by country.
 
 ### Learnings
