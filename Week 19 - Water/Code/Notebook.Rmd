@@ -168,22 +168,26 @@ top_country_cum1 <- top_country_cum %>%
   mutate(rank = as_factor(rank(cum_installs, ties.method = "first"))) %>% 
   ungroup()
 
-top_country_cum1 %>% 
+g <- top_country_cum1 %>% 
   ggplot(aes(cum_installs, rank), group = country_name) + 
   geom_col(aes(fill = country_name)) + 
   geom_text(
-    aes(x = -200, label = country_name),
+    aes(x = -2000, label = country_name),
     hjust = 1, size = 14/.pt
   ) +
+  xlim(-25000, 100000) +
   labs(title = "Year: {closest_state}", y = "Country") +
   guides(fill = "none") +
   #gghighlight::gghighlight(country_name == "Uganda") +
   theme_minimal() +
   theme(
     axis.ticks.y = element_blank(),
-    axis.text.y = element_blank()
+    axis.text.y = element_blank(),
+    axis.title.y = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_blank()
   ) +
-  transition_states(year, transition_length = 10, state_length = 100, wrap = FALSE)
+  transition_states(year, transition_length = 10, state_length = 100)
 
 animate(g, renderer = gifski_renderer(file = here::here("Week 19 - Water", "Output", "Animation_Bar.gif"), loop = FALSE))
 
