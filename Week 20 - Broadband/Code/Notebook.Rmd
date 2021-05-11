@@ -27,7 +27,7 @@ library(DataExplorer)
 
 broadband <- broadband %>% janitor::clean_names()
 
-glimpse(broadband)
+#glimpse(broadband)
 
 fact_cols <- c('st')
 
@@ -40,21 +40,23 @@ broadband <- broadband %>%
          across(.cols = all_of(dbl_cols), .fns = as.double),
          across(.cols = all_of(char_Cols), .fns = as.character))
 
-introduce(broadband)
+#introduce(broadband)
 
 broadband <- broadband %>% drop_na(broadband_usage)
 
 
 #Clean broadband_zip data
 
-glimpse(broadband_zip)
+#glimpse(broadband_zip)
 
 broadband_zip <- broadband_zip %>% janitor::clean_names()
 
 char_Cols <- c('county_id', 'postal_code')
+fact_cols <- c('st')
 
 broadband_zip <- broadband_zip %>% 
-  mutate(across(.cols = all_of(char_Cols), .fns = as.character))
+  mutate(across(.cols = all_of(char_Cols), .fns = as.character),
+         across(.cols = all_of(fact_cols), .fns = as_factor))
 
 ```
 Build following type of graphs.
@@ -65,6 +67,8 @@ Broadband dataset- broadband usage
 2. Ridge Plot by state
 3. Timehorizon type chart by state
 3. Chloropeth map by county
+
+How do I credit tidytuesday
 
 
 Broadband Zip dataset- broadband usage
@@ -78,11 +82,67 @@ Broadband Zip dataset- broadband usage
 
 Let us build a box plot by state.
 
-```{r}
+```{r Box_Plot}
+
+bu_county <- broadband %>% ggplot(aes(broadband_usage, reorder(st, broadband_usage, median))) + geom_boxplot() +
+  labs(title = "Broadband usage by state", 
+       y = "State",
+       x = "Broadband Usage",
+       subtitle = "Based on County Data",
+       caption = "#TidyTuesday \n Week 20 Broadband Usage Data")
+
+bu_zip <- broadband_zip %>% ggplot(aes(broadband_usage, reorder(st, broadband_usage, median))) + geom_boxplot() +
+  labs(title = "Broadband usage by state", 
+       y = "State",
+       x = "Broadband Usage",
+       subtitle = "Based on Zip Data",
+       caption = "#TidyTuesday \n Week 20 Broadband Usage Data")
+
+library(patchwork)
+
+broad_band_box <- bu_county + bu_zip
+
+broad_band_box
+
+ggsave(here::here("Week 20 - Broadband", "Output", "BroadBandUsageBoxPlot.png"), width = 10.5, height = 8, units = "in")
+
+```
+Ridge Plot
+
+```{r Ridge Plot}
+
+library(ggridges)
+
+  bb_ridge_county <- broadband %>% ggplot(aes(broadband_usage, reorder(st, broadband_usage, median))) + geom_density_ridges() +
+  xlim(c(0,1)) +
+  labs(title = "Broadband usage by state", 
+       y = "State",
+       x = "Broadband Usage",
+       subtitle = "Based on County Data",
+       caption = "#TidyTuesday \n Week 20 Broadband Usage Data") 
+
+bb_ridge_zip <- broadband_zip %>% ggplot(aes(broadband_usage, reorder(st, broadband_usage, median))) + geom_density_ridges() +
+  xlim(c(0,1)) +
+  labs(title = "Broadband usage by state", 
+       y = "State",
+       x = "Broadband Usage",
+       subtitle = "Based on Zip Data",
+       caption = "#TidyTuesday \n Week 20 Broadband Usage Data") 
+
+bb_ridge_county + bb_ridge_zip
+
+ggsave(here::here("Week 20 - Broadband", "Output", "BroadBandUsageRidgePlot.png"), width = 10.5, height = 8, units = "in")
+
+```
+
+Time Horizon Chart
+
+```{r Time Horizon Chart}
 
 
 
 ```
+
 
 
 When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
