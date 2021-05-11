@@ -17,11 +17,13 @@ broadband_zip <- tuesdaydata$broadband_zip
 
 ```
 
-Explore data
+Explore and clean data
 
 ```{r Explore}
 
 library(DataExplorer)
+
+#Clean Broadband data
 
 broadband <- broadband %>% janitor::clean_names()
 
@@ -34,20 +36,43 @@ dbl_cols <- c('broadband_availability_per_fcc', 'broadband_usage')
 char_Cols <- c('county_id')
 
 broadband <- broadband %>% 
-  mutate(across(.cols = fact_cols, .fns = as_factor),
-         across(.cols = dbl_cols, .fns = as.double),
-         across(.cols = char_Cols, .fns = as.character))
+  mutate(across(.cols = all_of(fact_cols), .fns = as_factor),
+         across(.cols = all_of(dbl_cols), .fns = as.double),
+         across(.cols = all_of(char_Cols), .fns = as.character))
 
 introduce(broadband)
 
-df <- (is.na(broadband))
+broadband <- broadband %>% drop_na(broadband_usage)
 
-df1 <- df %>% rowsum()
 
-create_report(broadband_zip)
+#Clean broadband_zip data
+
+glimpse(broadband_zip)
+
+broadband_zip <- broadband_zip %>% janitor::clean_names()
+
+char_Cols <- c('county_id', 'postal_code')
+
+broadband_zip <- broadband_zip %>% 
+  mutate(across(.cols = all_of(char_Cols), .fns = as.character))
 
 ```
+Build following type of graphs.
 
+Broadband dataset- broadband usage
+
+1. Box Plot by state
+2. Ridge Plot by state
+3. Timehorizon type chart by state
+3. Chloropeth map by county
+
+
+Broadband Zip dataset- broadband usage
+
+1. Box Plot by state
+2. Ridge Plot by state
+3. Timehorizon type chart by state
+3. Chloropeth map by zip code
 
 
 
