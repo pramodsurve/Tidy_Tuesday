@@ -135,14 +135,32 @@ ggsave(here::here("Week 20 - Broadband", "Output", "BroadBandUsageRidgePlot.png"
 
 ```
 
-Time Horizon Chart.
-Use latticeExtra::horizonplot function to plot horizon plot. - Can this type of plot created for non-time quantitative variable?
 
-```{r Time Horizon Chart}
+Choropleth map
+
+I have used the usmap library.
+
+**Important to create county_ids by name fips or state codes by name state if you want to plot by state or counties**
+
+Other important library is **maps**. Some useful documentation can be found over [here.](https://www.rdocumentation.org/packages/maps/versions/3.3.0/topics/map)
 
 
+Here is a [comprehensive documentation](https://www.r-graph-gallery.com/choropleth-map.html) to create choropleth maps.
+
+```{r Map}
+
+library(usmap)
+
+broadband <- broadband %>% 
+  mutate(fips = if_else(str_length(county_id) == 4, str_c("0", county_id), county_id))
+
+plot_usmap(data = broadband, values = "broadband_usage", color = "Black") + 
+  scale_fill_continuous(name = "Broadband Usage", low = "white", high = "red") +
+  theme(legend.position = "right") +
+  labs(title = "Broadband Usage in US Counties",
+       caption = "#TidyTuesday \n Week 20 Broadband Usage Data")
+
+ggsave(here::here("Week 20 - Broadband", "Output", "Choropleth.png"), width = 10.5, height = 8, units = "in")
 
 ```
 
-
-Chlorpeth map
