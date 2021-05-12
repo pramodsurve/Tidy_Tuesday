@@ -154,13 +154,29 @@ library(usmap)
 broadband <- broadband %>% 
   mutate(fips = if_else(str_length(county_id) == 4, str_c("0", county_id), county_id))
 
-plot_usmap(data = broadband, values = "broadband_usage", color = "Black") + 
-  scale_fill_continuous(name = "Broadband Usage", low = "white", high = "red") +
+usage <- plot_usmap(data = broadband, values = "broadband_usage", color = "Black") + 
+  scale_fill_continuous(name = NULL, low = "white", high = "red") +
   theme(legend.position = "right") +
   labs(title = "Broadband Usage in US Counties",
        caption = "#TidyTuesday \n Week 20 Broadband Usage Data")
 
+ggsave(here::here("Week 20 - Broadband", "Output", "Broadband_Usage.png"), plot = usage, width = 10.5, height = 8, units = "in")
+
+
+availability <- plot_usmap(data = broadband, values = "broadband_availability_per_fcc", color = "Black") + 
+  scale_fill_continuous(low = "white", high = "red") +
+  #guides(fill = FALSE) +
+  theme(legend.position = "none") +
+  labs(title = "Broadband Availability in US Counties")
+
+library(patchwork)
+
+availability + usage + plot_layout(guides = 'collect') + theme(legend.position = "right")
+
 ggsave(here::here("Week 20 - Broadband", "Output", "Choropleth.png"), width = 10.5, height = 8, units = "in")
 
 ```
+
+
+Time Horizon style map to show ridge plot.
 
