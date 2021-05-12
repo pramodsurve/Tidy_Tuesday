@@ -177,6 +177,25 @@ ggsave(here::here("Week 20 - Broadband", "Output", "Choropleth.png"), width = 10
 
 ```
 
+I have trouble putting legend at the bottom.
+
+
+
+Leaflet
+
+```{r leaflet map}
+
+library(leaflet)
+
+m <- leaflet() %>% 
+  addTiles() %>%  
+  addMarkers(lng = 106, lat = 12)
+
+m
+
+```
+
+
 
 Time Horizon style map to show ridge plot.
 
