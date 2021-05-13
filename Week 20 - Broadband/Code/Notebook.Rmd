@@ -147,6 +147,9 @@ Other important library is **maps**. Some useful documentation can be found over
 
 Here is a [comprehensive documentation](https://www.r-graph-gallery.com/choropleth-map.html) to create choropleth maps.
 
+
+[Geocomputation book](https://geocompr.robinlovelace.net/intro.html)
+
 ```{r Map}
 
 library(usmap)
