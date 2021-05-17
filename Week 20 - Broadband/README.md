@@ -25,6 +25,8 @@ I created **choropleth map** with the data.
 
 Here are some additional resources to create maps using R.
 
+zipcodeR is an R package that makes working with ZIP codes in R easier. It provides data on all U.S. ZIP codes using multiple open data sources, making it easier for social science researchers and data scientists to work with ZIP code-level data in data science projects using R.
+
 Other important library is **maps**. Some useful documentation can be
 found over
 [here.](https://www.rdocumentation.org/packages/maps/versions/3.3.0/topics/map)
