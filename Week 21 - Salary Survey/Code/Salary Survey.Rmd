@@ -1,0 +1,35 @@
+---
+title: "Week 21 - Salary Survey"
+output: html_notebook
+---
+
+First Import Data
+
+```{r Data}
+
+library(tidyverse)
+
+tuesdata <- tidytuesdayR::tt_load('2021-05-18')
+
+survey <- tuesdata$survey
+
+```
+
+Explore Data
+
+```{r Explore Data}
+
+library(lubridate)
+DataExplorer::create_report(survey)
+
+glimpse(survey)
+
+fact_col <- c("how_old_are_you", "currency", "overall_years_of_professional_experience", "years_of_experience_in_field", "gender", "highest_level_of_education_completed")
+
+survey <- survey %>% mutate(across(.cols = all_of(fact_col), .fns = as_factor),
+                            timestamp = mdy_hms(timestamp))
+
+glimpse(survey)
+
+```
+
