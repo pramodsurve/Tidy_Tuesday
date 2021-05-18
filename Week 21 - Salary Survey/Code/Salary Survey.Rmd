@@ -22,7 +22,7 @@ Explore Data
 library(lubridate)
 DataExplorer::create_report(survey)
 
-glimpse(survey)
+#glimpse(survey)
 
 fact_col <- c("how_old_are_you", "currency", "overall_years_of_professional_experience", "years_of_experience_in_field", "gender", "highest_level_of_education_completed")
 
@@ -30,6 +30,12 @@ survey <- survey %>% mutate(across(.cols = all_of(fact_col), .fns = as_factor),
                             timestamp = mdy_hms(timestamp))
 
 glimpse(survey)
+
+
+survey %>% filter(currency == "USD", annual_salary < 500000) %>% ggplot() + geom_histogram(aes(annual_salary), bins = 50)
+
+
+survey %>% filter(currency == "USD", annual_salary < 500000) %>% ggplot() + stat_ecdf(aes(annual_salary, color = how_old_are_you))
 
 ```
 
