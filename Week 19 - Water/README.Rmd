@@ -13,6 +13,17 @@ knitr::opts_chunk$set(echo = TRUE)
 
 I concentrated on ggiraph and gganimate packages to create interactive and animation for water points installed by country.
 
+1. Bar Graph
+
+![](Output/Animation_Bar.gif)
+
+
+2. Line Chart
+
+![](Output/Animation.gif)
+
+
+
 
 ### Learnings
 

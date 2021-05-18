@@ -8,6 +8,14 @@ Pramod Surve
 I concentrated on ggiraph and gganimate packages to create interactive
 and animation for water points installed by country.
 
+1.  Bar Graph
+
+![](Output/Animation_Bar.gif)
+
+1.  Line Chart
+
+![](Output/Animation.gif)
+
 ### Learnings
 
 -   The graphs become too cluttered if there are many lines in

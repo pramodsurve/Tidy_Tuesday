@@ -42,7 +42,7 @@ broadband <- broadband %>%
 
 #introduce(broadband)
 
-broadband <- broadband %>% drop_na(broadband_usage)
+#broadband <- broadband %>% drop_na(broadband_usage)
 
 
 #Clean broadband_zip data
@@ -147,6 +147,9 @@ Other important library is **maps**. Some useful documentation can be found over
 
 Here is a [comprehensive documentation](https://www.r-graph-gallery.com/choropleth-map.html) to create choropleth maps.
 
+
+[Geocomputation book](https://geocompr.robinlovelace.net/intro.html)
+
 ```{r Map}
 
 library(usmap)
@@ -156,8 +159,8 @@ broadband <- broadband %>%
 
 usage <- plot_usmap(data = broadband, values = "broadband_usage", color = "Black") + 
   scale_fill_continuous(name = NULL, low = "white", high = "red") +
-  theme(legend.position = "right") +
-  labs(title = "Broadband Usage in US Counties",
+  theme(legend.position = "none") +
+  labs(title = "Usage",
        caption = "#TidyTuesday \n Week 20 Broadband Usage Data")
 
 ggsave(here::here("Week 20 - Broadband", "Output", "Broadband_Usage.png"), plot = usage, width = 10.5, height = 8, units = "in")
@@ -165,19 +168,22 @@ ggsave(here::here("Week 20 - Broadband", "Output", "Broadband_Usage.png"), plot 
 
 availability <- plot_usmap(data = broadband, values = "broadband_availability_per_fcc", color = "Black") + 
   scale_fill_continuous(low = "white", high = "red") +
-  #guides(fill = FALSE) +
-  theme(legend.position = "none") +
-  labs(title = "Broadband Availability in US Counties")
+  guides(fill = FALSE) +
+  #theme(legend.position = "none") +
+  labs(title = "Availability")
 
 library(patchwork)
 
-availability + usage + plot_layout(guides = 'collect') + theme(legend.position = "right")
+availability + usage + 
+  plot_annotation(title = "Broadband Availability vs Usage in US") +
+  plot_layout(guides = 'collect') &
+  theme(plot.title = element_text(hjust = 0.5), legend.position = "bottom")
 
 ggsave(here::here("Week 20 - Broadband", "Output", "Choropleth.png"), width = 10.5, height = 8, units = "in")
 
 ```
 
-I have trouble putting legend at the bottom.
+Changing legend position for combined plot requires & instead of +.
 
 
 
