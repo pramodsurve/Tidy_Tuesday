@@ -189,7 +189,7 @@ library(leaflet)
 
 m <- leaflet() %>% 
   addTiles() %>%  
-  addMarkers(lng = 106, lat = 12)
+  addMarkers(lng = 73.8, lat = 18.5)
 
 m
 
