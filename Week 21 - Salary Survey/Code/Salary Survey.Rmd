@@ -20,22 +20,31 @@ Explore Data
 ```{r Explore Data}
 
 library(lubridate)
-DataExplorer::create_report(survey)
+#DataExplorer::create_report(survey)
 
 #glimpse(survey)
 
 fact_col <- c("how_old_are_you", "currency", "overall_years_of_professional_experience", "years_of_experience_in_field", "gender", "highest_level_of_education_completed")
 
 survey <- survey %>% mutate(across(.cols = all_of(fact_col), .fns = as_factor),
-                            timestamp = mdy_hms(timestamp))
+                            timestamp = mdy_hms(timestamp),
+                            how_old_are_you = fct_relevel(how_old_are_you, "under 18", "18-24", "25-34", "35-44", "45-54", "55-64", "65 or over"),
+                            overall_years_of_professional_experience = fct_relevel(overall_years_of_professional_experience, "1 year or less", "2 - 4 years", "5-7 years", "8 - 10 years", "11 - 20 years", "21 - 30 years", "31 - 40 years", "41 years or more"),
+                            years_of_experience_in_field = fct_relevel(years_of_experience_in_field, "1 year or less", "2 - 4 years", "5-7 years", "8 - 10 years", "11 - 20 years", "21 - 30 years", "31 - 40 years", "41 years or more"),
+                            highest_level_of_education_completed = fct_relevel(highest_level_of_education_completed, "High School", "Some college", "College degree", "Master's degree", "PhD"))
 
-glimpse(survey)
+#glimpse(survey)
 
 
-survey %>% filter(currency == "USD", annual_salary < 500000) %>% ggplot() + geom_histogram(aes(annual_salary), bins = 50)
+survey %>% filter(currency == "USD", annual_salary < 500000) %>% ggplot() + geom_freqpoly(aes(annual_salary, color = how_old_are_you), bins = 50)
 
 
 survey %>% filter(currency == "USD", annual_salary < 500000) %>% ggplot() + stat_ecdf(aes(annual_salary, color = how_old_are_you))
 
-```
 
+survey %>% filter(currency == "USD", annual_salary < 500000) %>% ggplot() +
+  geom_violin(aes(how_old_are_you, annual_salary))
+```
+Country data is dirty. See if you can clean it using text mining similarity and get all records filtered for USA.
+
+Refactor how_old_are_you
